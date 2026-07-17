@@ -33,6 +33,18 @@ class InMemoryTenantRegistryTest {
     }
 
     @Test
+    void hashShapeCheckAcceptsRealHashesAndRejectsKeysAndGarbage() {
+        String key = ApiKeys.generate();
+        assertThat(ApiKeys.isHashShaped(ApiKeys.hash(key))).isTrue();
+        assertThat(ApiKeys.isHashShaped(key)).isFalse();          // plaintext key, wrong length
+        assertThat(ApiKeys.isHashShaped("not-a-hash")).isFalse();
+        assertThat(ApiKeys.isHashShaped("")).isFalse();
+        assertThat(ApiKeys.isHashShaped(null)).isFalse();
+        // right length, illegal alphabet (standard base64 '+')
+        assertThat(ApiKeys.isHashShaped("+".repeat(43))).isFalse();
+    }
+
+    @Test
     void validKeyResolvesItsTenant() {
         var registry = new InMemoryTenantRegistry();
         String key = ApiKeys.generate();

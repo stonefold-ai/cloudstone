@@ -32,6 +32,18 @@ spring:
     placeholders:
       json_type: text
 
+# Tenants are seeded from config in the local profile. Only key HASHES go
+# here (generate a pair with the GenerateApiKey helper); the plaintext key
+# stays with the caller. With no tenants configured, a 'dev' tenant is
+# auto-seeded at startup and its key printed once to the console.
+#
+# stonefold:
+#   tenants:
+#     - id: acme
+#       display-name: Acme Corp
+#       key-hashes:
+#         - "<base64url sha-256 of the api key>"
+
 ---
 # Cloud: everything injected from the environment; the image contains no
 # secrets and no environment-specific values.

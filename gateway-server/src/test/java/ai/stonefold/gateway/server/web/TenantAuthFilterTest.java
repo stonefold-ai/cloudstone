@@ -27,8 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         // In-memory H2 so this context does not contend for the file-backed
-        // database the context-load smoke test opens.
-        properties = "spring.datasource.url=jdbc:h2:mem:authtest;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE")
+        // database the context-load smoke test opens. A tenant is seeded via
+        // properties so the dev auto-seed's key printout stays out of logs.
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:authtest;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE",
+                "stonefold.tenants[0].id=seeded",
+                "stonefold.tenants[0].key-hashes[0]=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+        })
 @ActiveProfiles("local")
 class TenantAuthFilterTest {
 
