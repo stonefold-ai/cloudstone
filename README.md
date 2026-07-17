@@ -62,12 +62,7 @@ the image contains no secrets. Kubernetes probes are exposed at
 `/actuator/health/liveness` and `/actuator/health/readiness`, metrics at
 `/actuator/prometheus`.
 
-## Next steps (roughly in order)
+## Roadmap
 
-1. Bring `InterceptedAction` / route shapes in line with the spec wire format.
-2. Implement `SteleParser` + `SteleCompiler` against the normative grammar.
-3. Implement JDBC audit log, ledger (atomic debit), session store, tenant registry.
-4. Seed the local tenant registry from configuration properties (the auth
-   filter itself is in place: bearer key → tenant, fail closed, uniform 401).
-5. Wire the hot path in `InterceptController`: session → policy → audit → ledger → forward/refuse.
-6. Run the TCK against `gateway-server` and burn down failures.
+Development proceeds in phases; see [ROADMAP.md](ROADMAP.md) for the current
+phase and how design documentation is published as behaviour ships.
