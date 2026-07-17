@@ -32,6 +32,47 @@ class GatewayConfigSeedingTest {
     }
 
     @Test
+    void duplicateTenantIdRefusesToBuild() {
+        var seeds = new TenantSeedProperties(List.of(
+                new TenantSeed("acme", null, null, List.of(ApiKeys.hash(ApiKeys.generate()))),
+                new TenantSeed("acme", null, null, List.of(ApiKeys.hash(ApiKeys.generate())))));
+
+        assertThatThrownBy(() -> GatewayConfig.buildRegistry(seeds))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("duplicate tenant id");
+    }
+
+    @Test
+    void tenantWithoutKeyHashesRefusesToBuild() {
+        var seeds = new TenantSeedProperties(List.of(
+                new TenantSeed("acme", null, null, List.of())));
+
+        assertThatThrownBy(() -> GatewayConfig.buildRegistry(seeds))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("no key-hashes");
+    }
+
+    @Test
+    void plaintextKeyInsteadOfHashRefusesWithPointedError() {
+        var seeds = new TenantSeedProperties(List.of(
+                new TenantSeed("acme", null, null, List.of(ApiKeys.generate()))));
+
+        assertThatThrownBy(() -> GatewayConfig.buildRegistry(seeds))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("plaintext API key");
+    }
+
+    @Test
+    void malformedHashRefusesToBuild() {
+        var seeds = new TenantSeedProperties(List.of(
+                new TenantSeed("acme", null, null, List.of("not-a-hash"))));
+
+        assertThatThrownBy(() -> GatewayConfig.buildRegistry(seeds))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("malformed key hash");
+    }
+
+    @Test
     void duplicateHashAcrossTenantsRefusesToBuild() {
         String hash = ApiKeys.hash(ApiKeys.generate());
         var seeds = new TenantSeedProperties(List.of(
@@ -45,7 +86,7 @@ class GatewayConfigSeedingTest {
     @Test
     void blankTenantIdRefusesToBuild() {
         var seeds = new TenantSeedProperties(List.of(
-                new TenantSeed(" ", null, null, List.of())));
+                new TenantSeed(" ", null, null, List.of(ApiKeys.hash(ApiKeys.generate())))));
 
         assertThatThrownBy(() -> GatewayConfig.buildRegistry(seeds))
                 .isInstanceOf(IllegalArgumentException.class);

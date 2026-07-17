@@ -65,9 +65,17 @@ configuration (see the commented `stonefold.tenants` block in
 java -cp gateway-tenancy/target/classes ai.stonefold.gateway.tenancy.GenerateApiKey
 ```
 
-Registering the same key hash for two tenants refuses to boot. The `cloud`
-profile never auto-seeds: an empty production registry means nobody
-authenticates, which is the intended fail-closed outcome.
+A mis-seeded config refuses to boot: duplicate tenant ids, the same key hash
+on two tenants, a tenant without key hashes, or a malformed hash value —
+including a plaintext key pasted where the hash belongs — are all startup
+errors. One misconfiguration the gateway cannot detect: if the whole
+`stonefold.tenants` block is misspelled or misplaced, it binds as empty and
+the dev auto-seed kicks in — so if you configured tenants but the startup
+log shows the auto-seeded `dev` tenant instead of them, fix the config. The
+startup log always lists the tenants actually seeded.
+
+The `cloud` profile never auto-seeds and does not yet start at all — its
+persistence-backed tenant registry is still to be implemented.
 
 ## Running cloud-shaped
 

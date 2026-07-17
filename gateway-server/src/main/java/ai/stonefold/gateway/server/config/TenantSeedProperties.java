@@ -33,6 +33,7 @@ public record TenantSeedProperties(List<TenantSeed> tenants) {
             List<String> keyHashes) {
 
         public TenantSeed {
+            displayName = displayName == null ? id : displayName;
             keyHashes = keyHashes == null ? List.of() : List.copyOf(keyHashes);
         }
     }

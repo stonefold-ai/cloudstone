@@ -42,6 +42,27 @@ public final class ApiKeys {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
     }
 
+    /**
+     * True if the value has the shape {@link #hash} produces: exactly 43
+     * base64url characters, no padding. Used to fail fast on configured
+     * hashes that cannot possibly match anything — a plaintext key, a
+     * truncated paste, a hex digest from the wrong tool.
+     */
+    public static boolean isHashShaped(String value) {
+        if (value == null || value.length() != 43) {
+            return false;
+        }
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            boolean base64url = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
+                    || (c >= '0' && c <= '9') || c == '-' || c == '_';
+            if (!base64url) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static MessageDigest sha256() {
         try {
             return MessageDigest.getInstance("SHA-256");
