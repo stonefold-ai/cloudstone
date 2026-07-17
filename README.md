@@ -49,6 +49,25 @@ MAVEN_OPTS="-Djavax.net.ssl.trustStoreType=Windows-ROOT" mvn package
 
 The default `local` profile uses file-backed H2 (state in `.local/`) and a
 config-seeded tenant registry. Health: `http://localhost:8080/actuator/health`.
+While the schema is unreleased, editing a migration invalidates the dev
+database's Flyway checksums — delete `gateway-server/.local/` and restart.
+
+On first start with no tenants configured, the gateway auto-seeds a `dev`
+tenant and prints its API key once to the console — copy it into your
+caller's environment (`Authorization: Bearer <key>`). It is not stored and
+cannot be recovered; restarting with an empty registry mints a new one.
+
+To seed real tenants, generate a key/hash pair and put the **hash** in
+configuration (see the commented `stonefold.tenants` block in
+`application.yaml`); the plaintext key stays with the caller:
+
+```
+java -cp gateway-tenancy/target/classes ai.stonefold.gateway.tenancy.GenerateApiKey
+```
+
+Registering the same key hash for two tenants refuses to boot. The `cloud`
+profile never auto-seeds: an empty production registry means nobody
+authenticates, which is the intended fail-closed outcome.
 
 ## Running cloud-shaped
 
