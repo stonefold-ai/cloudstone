@@ -49,9 +49,9 @@ class TenantAuthFilterTest {
 
     @Test
     void missingAndUnknownCredentialsAreRejectedIdentically() {
-        ResponseEntity<String> missing = post("/v1/sessions", null);
-        ResponseEntity<String> unknown = post("/v1/sessions", ApiKeys.generate());
-        ResponseEntity<String> malformed = post("/v1/sessions", "not-a-key");
+        ResponseEntity<String> missing = post("/submit_intent", null);
+        ResponseEntity<String> unknown = post("/submit_intent", ApiKeys.generate());
+        ResponseEntity<String> malformed = post("/submit_intent", "not-a-key");
 
         assertThat(missing.getStatusCode().value()).isEqualTo(401);
         assertThat(unknown.getStatusCode().value()).isEqualTo(401);
@@ -66,7 +66,7 @@ class TenantAuthFilterTest {
                 .register(new Tenant(new TenantId("acme"), "Acme", null, Map.of()), ApiKeys.hash(key));
 
         // 501 is the stub handler's answer — proof the filter let us through.
-        assertThat(post("/v1/sessions", key).getStatusCode().value()).isEqualTo(501);
+        assertThat(post("/submit_intent", key).getStatusCode().value()).isEqualTo(501);
     }
 
     @Test
