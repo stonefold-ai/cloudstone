@@ -51,7 +51,11 @@ public final class TenantAuthFilter extends OncePerRequestFilter {
         if (tenant.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\":\"unauthorized\"}");
+            // Uniform error envelope (see ApiError). The message is generic on
+            // purpose: missing, malformed and unknown credentials must be
+            // indistinguishable, revealing nothing about tenant existence.
+            response.getWriter().write(
+                    "{\"error\":{\"code\":\"unauthorized\",\"message\":\"authentication required\"}}");
             return;
         }
         request.setAttribute(TENANT_ATTRIBUTE, tenant.get());
