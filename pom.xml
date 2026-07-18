@@ -36,8 +36,6 @@
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring-boot.version>4.1.0</spring-boot.version>
-    <junit.version>5.11.4</junit.version>
-    <assertj.version>3.26.3</assertj.version>
   </properties>
 
   <dependencyManagement>
@@ -75,16 +73,16 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Versions come from the Spring Boot BOM (junit-bom, assertj-bom):
+         pinning them here would fight the BOM and split the classpath. -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
