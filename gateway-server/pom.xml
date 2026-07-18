@@ -55,6 +55,18 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <!-- TestRestTemplate lives in its own module since Boot 4. -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-resttestclient</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- TestRestTemplate builds on RestTemplateBuilder, optional above. -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

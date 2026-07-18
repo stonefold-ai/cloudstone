@@ -33,18 +33,19 @@ Design rules the skeleton encodes:
 
 ## Running locally (no external services)
 
-Requires JDK 17+ (21 recommended) and Maven.
+Requires JDK 17+ (21 recommended). The Maven wrapper downloads the pinned
+Maven version on first use (`mvnw.cmd` on Windows).
 
 ```
-mvn package
-cd gateway-server && mvn spring-boot:run
+./mvnw package
+cd gateway-server && ../mvnw spring-boot:run
 ```
 
 On machines with TLS-intercepting antivirus/proxy, point the JVM at the
 Windows certificate store instead of the JDK truststore:
 
 ```
-MAVEN_OPTS="-Djavax.net.ssl.trustStoreType=Windows-ROOT" mvn package
+MAVEN_OPTS="-Djavax.net.ssl.trustStoreType=Windows-ROOT" ./mvnw package
 ```
 
 The default `local` profile uses file-backed H2 (state in `.local/`) and a

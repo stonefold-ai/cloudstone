@@ -37,4 +37,6 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
           cache: maven
-      - run: mvn -B -ntp verify
+      # The wrapper pins the Maven version; the runner's preinstalled Maven
+      # drifts with the ubuntu-latest image.
+      - run: ./mvnw -B -ntp verify
