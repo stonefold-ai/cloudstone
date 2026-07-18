@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 package ai.stonefold.gateway.core;
 
 /** Identifier of an agent principal within a tenant. */

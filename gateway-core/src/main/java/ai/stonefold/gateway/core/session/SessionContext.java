@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 package ai.stonefold.gateway.core.session;
 
 import ai.stonefold.gateway.core.AgentId;

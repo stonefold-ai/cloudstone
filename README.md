@@ -93,3 +93,8 @@ the image contains no secrets. Kubernetes probes are exposed at
 
 Development proceeds in phases; see [ROADMAP.md](ROADMAP.md) for the current
 phase and how design documentation is published as behaviour ships.
+
+## License
+
+[Apache License 2.0](LICENSE). Provided as is, without warranty of any kind;
+see the LICENSE for the full disclaimer.

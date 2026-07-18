@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 package ai.stonefold.gateway.persistence;
 
 import ai.stonefold.gateway.core.TenantId;
