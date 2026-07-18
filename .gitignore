@@ -8,3 +8,6 @@ target/
 .settings/
 .DS_Store
 Thumbs.db
+
+# Build and test logs
+*.log
