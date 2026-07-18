@@ -1,0 +1,4 @@
+# The wrapper scripts must keep their native line endings regardless of the
+# committer's platform: a CRLF mvnw is unexecutable on the Linux CI runner.
+mvnw text eol=lf
+mvnw.cmd text eol=crlf
