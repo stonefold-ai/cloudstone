@@ -14,11 +14,15 @@ here must eventually be covered by a TCK check.
 
 | Module | Depends on | Purpose |
 |---|---|---|
-| `gateway-core` | — | Framework-free domain model: tenants, sessions, intercepted actions, policy decisions, audit log and ledger interfaces. |
-| `gateway-stele` | core | Stele policy language: parse, validate, compile to an executable `PolicyEngine`. |
-| `gateway-tenancy` | core | Tenant registry, credential resolution, per-tenant configuration and limits. |
-| `gateway-persistence` | core, tenancy | JDBC implementations (Postgres / H2), Flyway migrations. |
-| `gateway-server` | all | Spring Boot executable: HTTP boundary, tenant auth filter, wiring, observability. |
+| `cloudstone-kernel` | — | The decision kernel: intercepted-operation model, the Stele policy language (parse, validate, compile to an executable `PolicyEngine`) and the deterministic decision types. No I/O, no clock, no framework, no tenant concept. |
+| `cloudstone-runtime` | kernel | The stateful, tenant-aware layer around the kernel: tenant and agent identity, ports for audit, ledger and session state, enforcement orchestration. |
+| `cloudstone-tenancy` | runtime | Tenant registry, credential resolution, per-tenant configuration and limits. |
+| `cloudstone-persistence` | runtime, tenancy | JDBC implementations (Postgres / H2), Flyway migrations. |
+| `cloudstone-server` | all | Spring Boot executable: HTTP boundary, tenant auth filter, wiring, observability. |
+
+The dependency rule is one-way: the kernel depends on nothing in this
+repository, each layer depends only on layers below it, and only
+`cloudstone-server` sees Spring.
 
 Design rules the skeleton encodes:
 
@@ -38,7 +42,7 @@ Maven version on first use (`mvnw.cmd` on Windows).
 
 ```
 ./mvnw package
-cd gateway-server && ../mvnw spring-boot:run
+cd cloudstone-server && ../mvnw spring-boot:run
 ```
 
 On machines with TLS-intercepting antivirus/proxy, point the JVM at the
@@ -51,7 +55,7 @@ MAVEN_OPTS="-Djavax.net.ssl.trustStoreType=Windows-ROOT" ./mvnw package
 The default `local` profile uses file-backed H2 (state in `.local/`) and a
 config-seeded tenant registry. Health: `http://localhost:8080/actuator/health`.
 While the schema is unreleased, editing a migration invalidates the dev
-database's Flyway checksums — delete `gateway-server/.local/` and restart.
+database's Flyway checksums — delete `cloudstone-server/.local/` and restart.
 
 On first start with no tenants configured, the gateway auto-seeds a `dev`
 tenant and prints its API key once to the console — copy it into your
@@ -59,18 +63,18 @@ caller's environment (`Authorization: Bearer <key>`). It is not stored and
 cannot be recovered; restarting with an empty registry mints a new one.
 
 To seed real tenants, generate a key/hash pair and put the **hash** in
-configuration (see the commented `stonefold.tenants` block in
+configuration (see the commented `cloudstone.tenants` block in
 `application.yaml`); the plaintext key stays with the caller:
 
 ```
-java -cp gateway-tenancy/target/classes ai.stonefold.gateway.tenancy.GenerateApiKey
+java -cp cloudstone-tenancy/target/classes ai.stonefold.cloudstone.tenancy.GenerateApiKey
 ```
 
 A mis-seeded config refuses to boot: duplicate tenant ids, the same key hash
 on two tenants, a tenant without key hashes, or a malformed hash value —
 including a plaintext key pasted where the hash belongs — are all startup
 errors. One misconfiguration the gateway cannot detect: if the whole
-`stonefold.tenants` block is misspelled or misplaced, it binds as empty and
+`cloudstone.tenants` block is misspelled or misplaced, it binds as empty and
 the dev auto-seed kicks in — so if you configured tenants but the startup
 log shows the auto-seeded `dev` tenant instead of them, fix the config. The
 startup log always lists the tenants actually seeded.

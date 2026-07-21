@@ -23,11 +23,11 @@
   </licenses>
 
   <modules>
-    <module>gateway-core</module>
-    <module>gateway-stele</module>
-    <module>gateway-tenancy</module>
-    <module>gateway-persistence</module>
-    <module>gateway-server</module>
+    <module>cloudstone-kernel</module>
+    <module>cloudstone-runtime</module>
+    <module>cloudstone-tenancy</module>
+    <module>cloudstone-persistence</module>
+    <module>cloudstone-server</module>
   </modules>
 
   <properties>
@@ -41,7 +41,7 @@
   <dependencyManagement>
     <dependencies>
       <!-- Boot BOM manages Jackson, JDBC, logging etc. for all modules; only
-           gateway-server actually depends on the Spring framework itself. -->
+           cloudstone-server actually depends on the Spring framework itself. -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -51,22 +51,22 @@
       </dependency>
       <dependency>
         <groupId>ai.stonefold</groupId>
-        <artifactId>gateway-core</artifactId>
+        <artifactId>cloudstone-kernel</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>ai.stonefold</groupId>
-        <artifactId>gateway-stele</artifactId>
+        <artifactId>cloudstone-runtime</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>ai.stonefold</groupId>
-        <artifactId>gateway-tenancy</artifactId>
+        <artifactId>cloudstone-tenancy</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>ai.stonefold</groupId>
-        <artifactId>gateway-persistence</artifactId>
+        <artifactId>cloudstone-persistence</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
