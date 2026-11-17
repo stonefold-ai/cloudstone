@@ -1,14 +1,10 @@
 # Cloudstone
 
-Cloudstone is the production-grade, multitenant Java implementation of the
-Stonefold gateway.
-Status: **skeleton** — module boundaries and interfaces are laid out, most
-implementations throw `UnsupportedOperationException`.
+**Paused — research-only direction, decided 2026-11-01.** Stonefold is a research project; the Python implementation is its active experimental instrument. Java development and the production product roadmap are paused.
 
-The [spec repo](../spec) is normative for protocol shapes, the Stele grammar
-and decision semantics. The Python implementation in [`../stonefold`](../stonefold)
-is the reference; on divergence, the spec wins. Every behaviour implemented
-here must eventually be covered by a TCK check.
+Cloudstone preserves the earlier multitenant Java gateway skeleton for historical reference. Module boundaries and interfaces are laid out; most implementations throw `UnsupportedOperationException`. The code, history, and build instructions remain available for reproduction.
+
+Earlier architecture specifications are retired. This README describes only the preserved Java prototype; it is not an active roadmap.
 
 ## Modules
 
@@ -93,11 +89,6 @@ environment (`GATEWAY_DB_URL`, `GATEWAY_DB_USER`, `GATEWAY_DB_PASSWORD`);
 the image contains no secrets. Kubernetes probes are exposed at
 `/actuator/health/liveness` and `/actuator/health/readiness`, metrics at
 `/actuator/prometheus`.
-
-## Roadmap
-
-Development proceeds in phases; see [ROADMAP.md](ROADMAP.md) for the current
-phase and how design documentation is published as behaviour ships.
 
 ## License
 
